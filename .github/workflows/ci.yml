@@ -36,9 +36,9 @@ jobs:
       run: |
         dotnet test "client\client\unittest\bin\Debug\unittest.dll" --logger "trx;LogFileName=test_results.trx"
       
-      - name: Upload test results as artifact
-        uses: actions/upload-artifact@v3
-        with:
+    - name: Upload test results as artifact
+      uses: actions/upload-artifact@v3
+      with:
           name: test-results
           path: ./TestResults
 
