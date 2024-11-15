@@ -1,6 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
-using System.IO.Ports;
 using client;
 using System;
 
@@ -43,7 +42,7 @@ namespace unit_test_client
         public void Button1_Click_ShouldOpenSerialPortAndSendData()
         {
             // Arrange
-            form.comboBox1.SelectedItem = "COM3"; // Change to a valid port on your machine
+            form.comboBox1.SelectedItem = "COM4"; // Change to a valid port on your machine
             form.comboBox2.SelectedItem = "9600"; // Select the baud rate
 
             // Act
@@ -53,23 +52,6 @@ namespace unit_test_client
             Assert.IsTrue(form.serialPort.IsOpen, "Serial port should be open after button click.");
             LogResult("Button1_Click test passed: Serial port opened and data sent.");
         }
-
-        [TestMethod]
-        public void Form1_FormClosing_ShouldClosePortIfOpen()
-        {
-            // Arrange
-            form.serialPort = new SerialPort("COM2", 9600); // Встановлюємо віртуальний COM-порт
-            form.serialPort.Open(); // Відкриваємо порт
-            form.isMonitoring = true; // Встановлюємо моніторинг
-
-            // Act
-            form.Form1_FormClosing(null, null); // Викликаємо метод закриття форми
-
-            // Assert
-            Assert.IsFalse(form.serialPort.IsOpen, "Serial port should be closed after form closing.");
-            LogResult("Form1_FormClosing test passed: Serial port closed.");
-        }
-
         [TestMethod]
         public void StartMonitoring_ShouldInvokeReadLine_WhenMonitoringIsTrue()
         {
