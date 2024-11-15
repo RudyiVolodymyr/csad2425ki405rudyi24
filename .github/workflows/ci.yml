@@ -32,9 +32,15 @@ jobs:
       run: |
         mkdir ci/test-results/unit
        
-    - name: Run Unit Tests
+    - name: Run tests and save results as .trx
       run: |
-        dotnet test client/Tests/unit_test_client.csproj > ci/test-results/unit/unit_test_results.txt
+        dotnet test "client\client\unittest\bin\Debug\unittest.dll" --logger "trx;LogFileName=test_results.trx"
+      
+      - name: Upload test results as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: ./TestResults
 
     - name: Create artifacts
       uses: actions/upload-artifact@v3
