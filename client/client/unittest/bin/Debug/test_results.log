@@ -1,3 +1,0 @@
-15.11.2024 18:48:46: Button1_Click test passed: Serial port opened and data sent.
-15.11.2024 18:48:46: LoadAvailablePorts test passed: COM ports loaded.
-15.11.2024 18:48:46: StartMonitoring test initiated.
