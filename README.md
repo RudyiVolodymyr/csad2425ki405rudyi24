@@ -9,4 +9,5 @@ This project focuses on creating a digital version of the classic game Rock, Pap
 - Game: Rock Paper Scissors;
 - Config format: INI.
 # 1.4. Details about technology, program language, and HW
-This project is particularly interesting as it will be built on a client-server architecture, as specified by the task. The client will be an application that receives data from the server, which in this case will be an Arduino board responsible for performing all the calculations. The result will then be sent back to the user through the application. The application itself is planned to be developed using one of the cross-platform programming languages, such as Java, C++, or C#. The final choice of language will be made once the development process begins.
+This project is particularly interesting as it will be built on a client-server architecture, as specified by the task. The client will be an application that receives data from the server, which in this case will be an Arduino board responsible for performing all the calculations. The result will then be sent back to the user through the application. The application itself is planned to be developed using one of the cross-platform programming languages, such as Java, C++, or C#. The final choice of language will be made once the development process begins..
+
