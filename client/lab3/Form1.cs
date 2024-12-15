@@ -19,6 +19,7 @@ namespace game_client
      /// Main form for the game client.
      /// Responsible for initializing the game, updating the interface, and handling user interactions with the application.
      /// </summary>
+
     public partial class Form1 : Form
     {
         private SoundPlayer _player = new SoundPlayer();
@@ -419,6 +420,7 @@ namespace game_client
         ///     }
         /// }
         /// </code>
+        //функція яка відкриває вибір камінь або ножниці або бумагу користувачу 1
         public virtual void Player1()
         {
             panel1.Visible = false;

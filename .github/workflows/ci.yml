@@ -25,7 +25,7 @@ jobs:
 
       - name: doxygen-install
         uses: ssciwr/doxygen-install@v1.6.0
-            
+      
       - name: Run CMD script
         shell: cmd
         run: |
@@ -41,3 +41,10 @@ jobs:
         with:
           name: doxygen-documentation
           path: ./docs/
+
+      - name: Upload script results as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: script-results
+          path: ./artefacts
+          
