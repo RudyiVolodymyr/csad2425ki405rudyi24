@@ -22,24 +22,29 @@ jobs:
         uses: arduino/setup-arduino-cli@v1
         with:
           version: 0.33.1
+
+      - name: doxygen-install
+        uses: ssciwr/doxygen-install@v1.6.0
       
       - name: Run CMD script
         shell: cmd
         run: |
           .\run.bat COM8 9600
+      - name: Upload script results as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: script-results
+          path: ./artefacts
+          
+      - name: Upload Doxygen documentation as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: doxygen-documentation
+          path: ./docs/
 
       - name: Upload script results as artifact
         uses: actions/upload-artifact@v3
         with:
           name: script-results
           path: ./artefacts
-
-        
-
-    
-   
-
-        
-
-    
-   
+          

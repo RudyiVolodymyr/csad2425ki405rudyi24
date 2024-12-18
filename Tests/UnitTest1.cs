@@ -284,6 +284,7 @@ namespace testingMenu
             Assert.AreEqual("20", form.textBox1.Text, "TextBox1 should display the correct counter value.");
             Assert.AreEqual("30", form.textBox2.Text, "TextBox2 should display the correct counter value.");
         }
+
         [TestMethod]
         public void GetCounterMove_ShouldReturnExpectedCounterMove()
         {
@@ -307,10 +308,6 @@ namespace testingMenu
                 Assert.IsTrue(result >= 1 && result <= 3, "Результат має бути випадковим числом між 1 та 3.");
             }
         }
-
-
-
-
     }
 }
 
