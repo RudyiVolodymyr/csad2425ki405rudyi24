@@ -160,6 +160,7 @@ namespace game_client
                 ini.Write("GameData", $"{gameKey}_TextBox3", textBox3.Text);
 
                 Console.WriteLine($"Дані успішно збережені у config.ini!"); // або інше повідомлення для тестів MessageBox.Show("Дані успішно збережені у config.ini!");
+
             }
             catch (Exception ex)
             {

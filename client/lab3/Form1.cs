@@ -255,7 +255,6 @@ namespace game_client
             IniFile ini = new IniFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.ini"));
             try
             {
-
                 // Читаємо значення з ini файлу як рядки
                 string checkBox1Value = ini.Read("CheckboxStates", "CheckBox1","");
                 string checkBox2Value = ini.Read("CheckboxStates", "CheckBox2","");
@@ -280,6 +279,7 @@ namespace game_client
             catch (Exception ex)
             {
                 Console.WriteLine($"Error reading INI file: " + ex.Message); //  MessageBox.Show("Error reading INI file: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);або інше повідомлення для тестів
+
             }
             label2.Visible = false;
             panel1.Visible = false;
@@ -983,6 +983,7 @@ namespace game_client
                     catch (TimeoutException)
                     {
                         Console.WriteLine("The serial port is inactive or not responding."); // або інше повідомлення для тестів  MessageBox.Show("The serial port is inactive or not responding.", "Port Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
                         StartMenu(); // Перенаправлення на головне меню
                         button1.Visible = true;
                         button21.Visible = true;
@@ -996,6 +997,7 @@ namespace game_client
             catch (Exception ex)
             {
                 Console.WriteLine("Error: " + ex.Message, "Serial Port Error"); // або інше повідомлення для тестів MessageBox.Show("Error: " + ex.Message, "Serial Port Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
                 StartMenu(); // Перенаправлення на головне меню
                 button1.Visible = true;
                 button21.Visible = true;
@@ -1564,6 +1566,7 @@ namespace game_client
                     catch (TimeoutException)
                     {
                         // Якщо порт не відповідає протягом часу таймауту, показуємо повідомлення і повертаємося до головного меню
+
                         Console.WriteLine("The serial port is inactive or not responding."); // або інше повідомлення для тестів  MessageBox.Show("The serial port is inactive or not responding.", "Port Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }

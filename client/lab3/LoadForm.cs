@@ -358,7 +358,6 @@ namespace game_client
                 MessageBox.Show("Please select a game session to delete.");
             }
             */
-
         }
 
         private void panel1_Paint(object sender, PaintEventArgs e)
