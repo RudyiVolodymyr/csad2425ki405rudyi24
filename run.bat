@@ -231,7 +231,6 @@ dotnet test deploy\client\UnitTestProject1.dll --logger "trx;LogFileName=%client
 if %errorlevel% neq 0 (
     echo Client tests failed.
     set step7Status=FAILED
-    goto FinalReport
 ) else (
     echo Client tests completed successfully.
     set step7Status=PASSED
