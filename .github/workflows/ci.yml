@@ -48,7 +48,7 @@ jobs:
       - name: Run CMD script
         shell: cmd
         run: |
-          .\run_local_build.bat COM9 9600
+          .\run.bat COM9 9600
 
       - name: Upload script results as artifact
         uses: actions/upload-artifact@v3
