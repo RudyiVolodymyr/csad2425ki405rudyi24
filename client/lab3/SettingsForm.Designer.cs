@@ -8,6 +8,7 @@ namespace game_client
         /// </summary>
         public System.ComponentModel.IContainer components = null;
 
+
         /// <summary>
         /// Clean up any resources being used.
         /// </summary>
@@ -28,6 +29,7 @@ namespace game_client
         /// the contents of this method with the code editor.
         /// </summary>
         public void InitializeComponent()
+
         {
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
@@ -259,5 +261,6 @@ namespace game_client
         public System.Windows.Forms.CheckBox checkBox1;
         public System.Windows.Forms.Label label4;
         public System.Windows.Forms.Label label1;
+
     }
 }

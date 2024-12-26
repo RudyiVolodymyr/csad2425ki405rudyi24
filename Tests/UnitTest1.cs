@@ -77,7 +77,6 @@ namespace testingMenu
         {
             public bool IsPlayer1Called { get; private set; }
 
-
             public override void Player1()
             {
                 IsPlayer1Called = true;
@@ -92,11 +91,6 @@ namespace testingMenu
             {
                 random = new Random(value); // Встановлюємо значення для тесту
             }
-
-
-
-
-
         }
 
         [TestMethod]

@@ -104,6 +104,7 @@ set step14Status=NOT STARTED
 set step15Status=NOT STARTED
 set step16Status=NOT STARTED
 set step17Status=NOT STARTED
+
 set step1Status=PASSED
 echo Step 1 completed successfully. [PASSED]
 
@@ -467,6 +468,7 @@ if %errorlevel% neq 0 (
 REM Step 15: Archive server build artifacts
 echo Step 15: Creating server build artifact archive...
 
+
 REM Create archive using PowerShell
 powershell -Command "Compress-Archive -Path %serverOutputFolder% -DestinationPath %serverArtifactZipPath%"
 
@@ -483,6 +485,7 @@ if %errorlevel% neq 0 (
 
 REM Step 16: Request COM port from user (for local execution) or use provided COM port (for GitHub Actions)
 echo Step 16: Checking for COM port and baud rate...
+
 REM Check if running in GitHub Actions
     REM Use the COM port and baud rate passed as environment variables (e.g., COM_PORT and BAUD_RATE)
     set "arduinoPort=%1"
@@ -496,6 +499,7 @@ REM Check if baud rate is 9600
 if not "%baudRate%"=="9600" (
     echo Error: Unsupported baud rate %baudRate%. Only 9600 is allowed.
     set step16Status=FAILED
+
     goto FinalReport
 )
 
@@ -644,6 +648,7 @@ echo ^<tr^>^<td^>14^</td^>^<td^>Compile Arduino sketch^</td^>^<td^>%step14Status
 echo ^<tr^>^<td^>15^</td^>^<td^>Archive server build artifacts^</td^>^<td^>%step15Status%^</td^>^</tr^>
 echo ^<tr^>^<td^>16^</td^>^<td^>Request COM port and baud rate^</td^>^<td^>%step16Status%^</td^>^</tr^>
 echo ^<tr^>^<td^>17^</td^>^<td^>Upload firmware to Arduino^</td^>^<td^>%step17Status%^</td^>^</tr^>
+
 
 echo ^</table^>
 echo ^</body^>

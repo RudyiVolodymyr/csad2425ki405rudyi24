@@ -28,6 +28,7 @@ namespace game_client
         /// the contents of this method with the code editor.
         /// </summary>
         public void InitializeComponent()
+
         {
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
@@ -186,6 +187,7 @@ namespace game_client
             this.label1.TabIndex = 13;
             this.label1.Text = "Save menu";
             this.label1.Click += new System.EventHandler(this.label1_Click);
+
             // 
             // SaveMenu
             // 
@@ -223,5 +225,6 @@ namespace game_client
         public System.Windows.Forms.Panel panel4;
         public System.Windows.Forms.TextBox textBox3;
         public System.Windows.Forms.Label label4;
+
     }
 }
