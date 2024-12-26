@@ -245,7 +245,6 @@ if %errorlevel% equ 0 (
     echo Some client tests failed.
     set clientTestsStatus=Failed
     set step8Status=FAILED
-    goto FinalReport
 ) else (
     echo All client tests passed successfully.
     set clientTestsStatus=Passed
