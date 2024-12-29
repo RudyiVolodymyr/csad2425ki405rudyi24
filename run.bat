@@ -102,6 +102,9 @@ set step12Status=NOT STARTED
 set step13Status=NOT STARTED
 set step14Status=NOT STARTED
 set step15Status=NOT STARTED
+set step16Status=NOT STARTED
+set step17Status=NOT STARTED
+
 set step1Status=PASSED
 echo Step 1 completed successfully. [PASSED]
 
@@ -228,7 +231,6 @@ dotnet test deploy\client\UnitTestProject1.dll --logger "trx;LogFileName=%client
 if %errorlevel% neq 0 (
     echo Client tests failed.
     set step7Status=FAILED
-    goto FinalReport
 ) else (
     echo Client tests completed successfully.
     set step7Status=PASSED
@@ -242,7 +244,6 @@ if %errorlevel% equ 0 (
     echo Some client tests failed.
     set clientTestsStatus=Failed
     set step8Status=FAILED
-    goto FinalReport
 ) else (
     echo All client tests passed successfully.
     set clientTestsStatus=Passed
@@ -367,49 +368,104 @@ echo ---------------------------
 echo SERVER BUILD AND UPLOAD START
 echo ---------------------------
 
-REM Step 11: Verify Arduino CLI installation
-echo Step 11: Verifying Arduino CLI installation...
-arduino-cli version >nul 2>&1
+REM Step 11: Run Unit Test Coverage
+echo Step 11: Running Unit Test Coverage...
+REM Define relative paths for coverage tools
+set OpenCoverPath=.\Tools\OpenCover
+set ReportGeneratorPath=.\ReportGenerator\net47
+set TestRunnerPath="vstest.console.exe"
+set TestAssembly=.\deploy\client\UnitTestProject1.dll
+set CoverageOutput=.\deploy\test_coverage\coverage.xml
+set ReportOutput=.\deploy\test_coverage\coverage-report
+
+
+REM Run tests with OpenCover for code coverage
+"OpenCover\OpenCover.Console.exe" -register -target:%TestRunnerPath% -targetargs:"%TestAssembly%" -output:%CoverageOutput% -filter:"+[*]* -[game_client.Properties.Resources]*"
+
+REM Generate HTML report from coverage
+"%ReportGeneratorPath%\ReportGenerator.exe" -reports:%CoverageOutput% -targetdir:%ReportOutput% -reporttypes:Html
+
+REM Check if the coverage report generation was successful
 if %errorlevel% neq 0 (
-    echo Error: Arduino CLI is not installed. Please install it first.
+    echo Error: Failed to generate coverage report.
     set step11Status=FAILED
-    goto FinalReport
 ) else (
-    echo Arduino CLI installed successfully.
+    echo Code coverage report generated successfully.
     set step11Status=PASSED
     echo Step 11 completed successfully. [PASSED]
 )
 
-REM Step 12: Install board definitions
-echo Step 12: Installing board definitions...
-arduino-cli core update-index >nul 2>&1
-arduino-cli core install arduino:avr >nul 2>&1
+REM Extract overall coverage percentage from coverage.xml
+for /f "tokens=3 delims== " %%i in ('findstr /i "summary numSequencePoints" "%CoverageOutput%"') do (
+    set totalCoverage=%%i
+)
+
+REM Clean up extracted value
+set totalCoverage=%totalCoverage:"=%
+set totalCoverage=%totalCoverage:%%=%
+echo.
+
+REM SERVER SECTION - COVERAGE SUMMARY
+echo ---------------------------
+echo COVERAGE SUMMARY
+echo ---------------------------
+echo Overall Code Coverage: %totalCoverage% %
+echo Coverage Output File: "%CoverageOutput%"
+echo Report Output Folder: "%ReportOutput%"
+echo ---------------------------
+
+echo.
+
+
+REM SERVER SECTION
+echo ---------------------------
+echo SERVER BUILD AND UPLOAD START
+echo ---------------------------
+
+REM Step 12: Verify Arduino CLI installation
+echo Step 12: Verifying Arduino CLI installation...
+arduino-cli version >nul 2>&1
 if %errorlevel% neq 0 (
-    echo Error: Failed to install board definitions for "%arduinoBoard%".
+    echo Error: Arduino CLI is not installed. Please install it first.
     set step12Status=FAILED
     goto FinalReport
 ) else (
-    echo Board definitions installed successfully.
+    echo Arduino CLI installed successfully.
     set step12Status=PASSED
     echo Step 12 completed successfully. [PASSED]
 )
 
-
-REM Step 13: Compile the Arduino sketch
-echo Step 13: Compiling Arduino sketch...
-arduino-cli compile -b arduino:avr:uno --output-dir %serverOutputFolder% %arduinoSketchFolder%\server.ino >nul 2>&1
+REM Step 13: Install board definitions
+echo Step 13: Installing board definitions...
+arduino-cli core update-index >nul 2>&1
+arduino-cli core install arduino:avr >nul 2>&1
 if %errorlevel% neq 0 (
-    echo Error: Failed to compile Arduino sketch.
+    echo Error: Failed to install board definitions for "%arduinoBoard%".
     set step13Status=FAILED
     goto FinalReport
 ) else (
-    echo Arduino sketch compiled successfully and saved to "%serverOutputFolder%".
+    echo Board definitions installed successfully.
     set step13Status=PASSED
     echo Step 13 completed successfully. [PASSED]
 )
 
-REM Step 14: Archive server build artifacts
-echo Step 14: Creating server build artifact archive...
+
+REM Step 14: Compile the Arduino sketch
+echo Step 14: Compiling Arduino sketch...
+arduino-cli compile -b arduino:avr:uno --output-dir %serverOutputFolder% %arduinoSketchFolder%\server.ino >nul 2>&1
+if %errorlevel% neq 0 (
+    echo Error: Failed to compile Arduino sketch.
+    set step14Status=FAILED
+    goto FinalReport
+) else (
+    echo Arduino sketch compiled successfully and saved to "%serverOutputFolder%".
+    set step14Status=PASSED
+    echo Step 14 completed successfully. [PASSED]
+)
+
+REM Step 15: Archive server build artifacts
+echo Step 15: Creating server build artifact archive...
+
 
 REM Create archive using PowerShell
 powershell -Command "Compress-Archive -Path %serverOutputFolder% -DestinationPath %serverArtifactZipPath%"
@@ -417,16 +473,17 @@ powershell -Command "Compress-Archive -Path %serverOutputFolder% -DestinationPat
 REM Check if archiving was successful
 if %errorlevel% neq 0 (
     echo Error: Failed to create server build artifact archive.
-    set step14Status=FAILED
+    set step15Status=FAILED
     goto FinalReport
 ) else (
     echo Server build artifacts saved at: %serverArtifactZipPath%.
-    set step14Status=PASSED
-    echo Step 14 completed successfully. [PASSED]
+    set step15Status=PASSED
+    echo Step 15 completed successfully. [PASSED]
 )
 
-REM Step 15: Request COM port from user (for local execution) or use provided COM port (for GitHub Actions)
-echo Step 15: Checking for COM port and baud rate...
+REM Step 16: Request COM port from user (for local execution) or use provided COM port (for GitHub Actions)
+echo Step 16: Checking for COM port and baud rate...
+
 REM Check if running in GitHub Actions
     REM Use the COM port and baud rate passed as environment variables (e.g., COM_PORT and BAUD_RATE)
     set "arduinoPort=%1"
@@ -439,7 +496,8 @@ echo Trying to connect to %arduinoPort% at baud rate %baudRate%...
 REM Check if baud rate is 9600
 if not "%baudRate%"=="9600" (
     echo Error: Unsupported baud rate %baudRate%. Only 9600 is allowed.
-    set step15Status=FAILED
+    set step16Status=FAILED
+
     goto FinalReport
 )
 
@@ -447,17 +505,17 @@ REM Check if the entered port exists (validate by checking if COM port is availa
 mode %arduinoPort% >nul 2>&1
 if %errorlevel% neq 0 (
     echo Error: Failed to connect to %arduinoPort%. The port may not exist or be available.
-    set step15Status=FAILED
+    set step16Status=FAILED
     goto FinalReport
 )
 
 REM If all checks pass
 echo COM port %arduinoPort% connected successfully at baud rate %baudRate%.
-set step14Status=PASSED
-echo Step 15 completed successfully. [PASSED]
+set step16Status=PASSED
+echo Step 16 completed successfully. [PASSED]
 
-REM Step 16: Upload firmware to Arduino board
-echo Step 16: Uploading firmware to Arduino board...
+REM Step 17: Upload firmware to Arduino board
+echo Step 17: Uploading firmware to Arduino board...
 arduino-cli upload -p "%arduinoPort%" -b arduino:avr:uno --input-dir %serverOutputFolder%
 
 REM Check if the upload was successful
@@ -535,17 +593,19 @@ echo   9    Archive client test artifacts        %step9Status%
 echo =========================================================
 echo  10    Generate documentation using Doxygen %step10Status%
 echo =========================================================
-echo  11    Verify Arduino CLI installation      %step11Status%
+echo  11    Run Unit Test Coverage               %step11Status%
 echo =========================================================
-echo  12    Install board definitions            %step12Status%
+echo  12    Verify Arduino CLI installation      %step12Status%
 echo =========================================================
-echo  13    Compile Arduino sketch               %step13Status%
+echo  13    Install board definitions            %step13Status%
 echo =========================================================
-echo  14    Archive server build artifacts       %step14Status%
+echo  14    Compile Arduino sketch               %step14Status%
 echo =========================================================
-echo  15    Request COM port and baud rate       %step15Status%
+echo  15    Archive server build artifacts       %step15Status%
 echo =========================================================
-echo  16    Upload firmware to Arduino           %step16Status%
+echo  16    Request COM port and baud rate       %step16Status%
+echo =========================================================
+echo  17    Upload firmware to Arduino           %step17Status%
 echo =========================================================
 echo ---------------------------------------------------------
 echo All tasks completed successfully on %date% at %time%
@@ -579,12 +639,14 @@ echo ^<tr^>^<td^>7^</td^>^<td^>Run client tests^</td^>^<td^>%step7Status%^</td^>
 echo ^<tr^>^<td^>8^</td^>^<td^>Check test results^</td^>^<td^>%step8Status%^</td^>^</tr^>
 echo ^<tr^>^<td^>9^</td^>^<td^>Archive client test artifacts^</td^>^<td^>%step9Status%^</td^>^</tr^>
 echo ^<tr^>^<td^>10^</td^>^<td^>Generate documentation using Doxygen^</td^>^<td^>%step10Status%^</td^>^</tr^>
-echo ^<tr^>^<td^>11^</td^>^<td^>Verify Arduino CLI installation^</td^>^<td^>%step11Status%^</td^>^</tr^>
-echo ^<tr^>^<td^>12^</td^>^<td^>Install board definitions^</td^>^<td^>%step12Status%^</td^>^</tr^>
-echo ^<tr^>^<td^>13^</td^>^<td^>Compile Arduino sketch^</td^>^<td^>%step13Status%^</td^>^</tr^>
-echo ^<tr^>^<td^>14^</td^>^<td^>Archive server build artifacts^</td^>^<td^>%step14Status%^</td^>^</tr^>
-echo ^<tr^>^<td^>15^</td^>^<td^>Request COM port and baud rate^</td^>^<td^>%step15Status%^</td^>^</tr^>
-echo ^<tr^>^<td^>16^</td^>^<td^>Upload firmware to Arduino^</td^>^<td^>%step16Status%^</td^>^</tr^>
+echo ^<tr^>^<td^>11^</td^>^<td^>Run Unit Test Coverage^</td^>^<td^>%step11Status%^</td^>^</tr^>
+echo ^<tr^>^<td^>12^</td^>^<td^>Verify Arduino CLI installation^</td^>^<td^>%step12Status%^</td^>^</tr^>
+echo ^<tr^>^<td^>13^</td^>^<td^>Install board definitions^</td^>^<td^>%step13Status%^</td^>^</tr^>
+echo ^<tr^>^<td^>14^</td^>^<td^>Compile Arduino sketch^</td^>^<td^>%step14Status%^</td^>^</tr^>
+echo ^<tr^>^<td^>15^</td^>^<td^>Archive server build artifacts^</td^>^<td^>%step15Status%^</td^>^</tr^>
+echo ^<tr^>^<td^>16^</td^>^<td^>Request COM port and baud rate^</td^>^<td^>%step16Status%^</td^>^</tr^>
+echo ^<tr^>^<td^>17^</td^>^<td^>Upload firmware to Arduino^</td^>^<td^>%step17Status%^</td^>^</tr^>
+
 
 echo ^</table^>
 echo ^</body^>

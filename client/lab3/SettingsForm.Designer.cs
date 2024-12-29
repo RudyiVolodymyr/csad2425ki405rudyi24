@@ -6,7 +6,8 @@ namespace game_client
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        public System.ComponentModel.IContainer components = null;
+
 
         /// <summary>
         /// Clean up any resources being used.
@@ -27,7 +28,8 @@ namespace game_client
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
-        private void InitializeComponent()
+        public void InitializeComponent()
+
         {
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
@@ -244,20 +246,21 @@ namespace game_client
 
         #endregion
 
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Panel panel4;
-        private System.Windows.Forms.CheckBox checkBox3;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Panel panel3;
-        private System.Windows.Forms.CheckBox checkBox2;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Panel panel5;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.CheckBox checkBox1;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label1;
+        public System.Windows.Forms.Panel panel1;
+        public System.Windows.Forms.Panel panel4;
+        public System.Windows.Forms.CheckBox checkBox3;
+        public System.Windows.Forms.Label label6;
+        public System.Windows.Forms.Panel panel3;
+        public System.Windows.Forms.CheckBox checkBox2;
+        public System.Windows.Forms.Label label5;
+        public System.Windows.Forms.Panel panel2;
+        public System.Windows.Forms.TextBox textBox1;
+        public System.Windows.Forms.Label label3;
+        public System.Windows.Forms.Panel panel5;
+        public System.Windows.Forms.Label label2;
+        public System.Windows.Forms.CheckBox checkBox1;
+        public System.Windows.Forms.Label label4;
+        public System.Windows.Forms.Label label1;
+
     }
 }

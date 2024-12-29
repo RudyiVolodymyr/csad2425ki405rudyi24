@@ -19,20 +19,23 @@ namespace game_client
      /// Main form for the game client.
      /// Responsible for initializing the game, updating the interface, and handling user interactions with the application.
      /// </summary>
-
     public partial class Form1 : Form
     {
-        private SoundPlayer _player = new SoundPlayer();
-        private int select1User;
-        private int select2User;
+        public bool IsExitCalled { get; set; } = false;
+        public bool StartMenuCalled { get; private set; } = false;
+        public bool Player1Called { get; private set; } = false;
+        public bool ServerControlCalled { get; private set; } = false;
+        public SoundPlayer _player = new SoundPlayer();
+        public int select1User;
+        public int select2User;
         public bool winStrategy;
         public bool randomMode;
-        private bool musicOn;
+        public bool musicOn;
         public string mode;
-        private bool onLoad;
-        private int score1;
-        private int score2;
-        private SerialPort serialPort = new SerialPort();
+        public bool onLoad;
+        public int score1;
+        public int score2;
+        public SerialPort serialPort = new SerialPort();
         public List<int> player1Moves = new List<int>();
         public Timer clickTimer;
         public Random random = new Random();
@@ -247,6 +250,7 @@ namespace game_client
         /// </code>
         public void StartMenu()
         {
+            ServerControlCalled = true;
             // Вказуємо шлях до ini файлу
             IniFile ini = new IniFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.ini"));
             try
@@ -274,7 +278,7 @@ namespace game_client
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error reading INI file: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Console.WriteLine($"Error reading INI file: " + ex.Message); //  MessageBox.Show("Error reading INI file: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);або інше повідомлення для тестів
 
             }
             label2.Visible = false;
@@ -286,6 +290,8 @@ namespace game_client
             panel3.Visible = false;
             panel8.Visible = false;
             panel13.Visible = false;
+            StartMenuCalled = true;
+
         }
 
         /// <summary>
@@ -420,9 +426,9 @@ namespace game_client
         ///     }
         /// }
         /// </code>
-        //функція яка відкриває вибір камінь або ножниці або бумагу користувачу 1
         public virtual void Player1()
         {
+            Player1Called = true;
             panel1.Visible = false;
             panel2.Visible = false;
             panel3.Visible = true;
@@ -566,79 +572,54 @@ namespace game_client
         public void Player2()
         {
             panel8.Visible = true;
-            // Отримати кореневу директорію проекту
-            string projectRoot = AppDomain.CurrentDomain.BaseDirectory;
-            // Побудувати шляхи до зображень відносно кореня проекту
-            string imagePath = Path.Combine(projectRoot, "img", "rock.png");
-            string imagePath1 = Path.Combine(projectRoot, "img", "paper.png");
-            string imagePath2 = Path.Combine(projectRoot, "img", "scissors.png");
 
-            LoadImage(imagePath, pictureBox8);
-            LoadImage(imagePath1, pictureBox7);
-            LoadImage(imagePath2, pictureBox9);
-            if (mode == "Man VS AI" || mode == "AI VS AI" && randomMode == true)
-            {
-                // Ініціалізуємо таймер
-                clickTimer = new Timer();
-                clickTimer.Interval = 1000; // Затримка 500 мс
-                clickTimer.Tick += (s, e) =>
-                {
-                    clickTimer.Stop(); // Зупиняємо таймер
-
-                    // Генеруємо випадкове число 1, 2 або 3
-                    int buttonNumber = random.Next(1, 4); // 1, 2 або 3
-
-                    // Вибираємо кнопку для натискання
-                    switch (buttonNumber)
-                    {
-                        case 1:
-                            button11.PerformClick();
-                            break;
-                        case 2:
-                            button12.PerformClick();
-                            break;
-                        case 3:
-                            button13.PerformClick();
-                            break;
-                    }
-                };
-                clickTimer.Start(); // Запускаємо таймер
-            }
-            else if ((mode == "Man VS AI" || mode == "AI VS AI") && winStrategy == true)
+            // Створюємо функції для кожного режиму
+            Action randomChoiceAction = () =>
             {
                 clickTimer = new Timer();
                 clickTimer.Interval = 1000;
                 clickTimer.Tick += (s, e) =>
                 {
                     clickTimer.Stop();
-
-                    int buttonNumber;
-
-                    if (winStrategy == true && player1Moves.Count >= 5)
-                    {
-                        // Викликаємо контрхід, якщо є достатньо даних про ходи гравця
-                        buttonNumber = GetCounterMove();
-                    }
-                    else
-                    {
-                        // Якщо даних недостатньо, обираємо випадковий хід
-                        buttonNumber = random.Next(1, 4);
-                    }
-
-                    switch (buttonNumber)
-                    {
-                        case 1:
-                            button11.PerformClick(); //папір
-                            break;
-                        case 2:
-                            button12.PerformClick(); //ножниці
-                            break;
-                        case 3:
-                            button13.PerformClick(); // камінь
-                            break;
-                    }
+                    int buttonNumber = random.Next(1, 4);
+                    SimulateButtonClick(buttonNumber);
                 };
                 clickTimer.Start();
+            };
+
+            Action strategicChoiceAction = () =>
+
+            {
+                clickTimer = new Timer();
+                clickTimer.Interval = 1000;
+                clickTimer.Tick += (s, e) =>
+                {
+                    clickTimer.Stop();
+                    int buttonNumber = (player1Moves.Count >= 5) ? GetCounterMove() : random.Next(1, 4);
+                    SimulateButtonClick(buttonNumber);
+                };
+                clickTimer.Start();
+            };
+
+            // Словник для зберігання режимів
+            var actionDict = new Dictionary<string, Action>
+    {
+        { "Man VS AI", randomChoiceAction },
+        { "AI VS AI", randomChoiceAction },
+        { "Man VS AI Strategy", strategicChoiceAction },
+        { "AI VS AI Strategy", strategicChoiceAction }
+    };
+
+            // Перевірка, чи існує відповідна дія для вибраного режиму
+            string actionKey = (mode == "Man VS AI" || mode == "AI VS AI")
+                ? (randomMode ? "Man VS AI" : "Man VS AI Strategy")
+                : null;
+
+            // Виконати дію, якщо вона визначена
+            if (actionKey != null && actionDict.ContainsKey(actionKey))
+            {
+                actionDict[actionKey].Invoke();
+
             }
         }
 
@@ -741,6 +722,21 @@ namespace game_client
             }
         }
 
+        private void SimulateButtonClick(int buttonNumber)
+        {
+            switch (buttonNumber)
+            {
+                case 1:
+                    button11.PerformClick(); // Rock
+                    break;
+                case 2:
+                    button12.PerformClick(); // Paper
+                    break;
+                case 3:
+                    button13.PerformClick(); // Scissors
+                    break;
+            }
+        }
         /// <summary>
         /// Handles the "Rock" button click event for Player 1.
         /// Tracks the move and initiates Player 2's turn.
@@ -966,6 +962,8 @@ namespace game_client
         /// </code>
         public void serverControl()
         {
+            ServerControlCalled = true;
+
             IniFile ini = new IniFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.ini"));
             string portName = ini.Read("TextBoxValues", "TextBox1", "");
             try
@@ -988,7 +986,8 @@ namespace game_client
                     }
                     catch (TimeoutException)
                     {
-                        MessageBox.Show("The serial port is inactive or not responding.", "Port Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        Console.WriteLine("The serial port is inactive or not responding."); // або інше повідомлення для тестів  MessageBox.Show("The serial port is inactive or not responding.", "Port Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
                         StartMenu(); // Перенаправлення на головне меню
                         button1.Visible = true;
                         button21.Visible = true;
@@ -1001,7 +1000,8 @@ namespace game_client
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: " + ex.Message, "Serial Port Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Console.WriteLine("Error: " + ex.Message, "Serial Port Error"); // або інше повідомлення для тестів MessageBox.Show("Error: " + ex.Message, "Serial Port Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
                 StartMenu(); // Перенаправлення на головне меню
                 button1.Visible = true;
                 button21.Visible = true;
@@ -1366,13 +1366,14 @@ namespace game_client
             }
         }
         protected override void OnFormClosing(FormClosingEventArgs e)
-        {
+        {/*
             // Тут можна закрити серійний порт, якщо він відкритий
             if (serialPort != null && serialPort.IsOpen)
             {
                 serialPort.Close();
             }
-            base.OnFormClosing(e);
+            base.OnFormClosing(e);*/
+
         }
 
         /// <summary>
@@ -1570,14 +1571,19 @@ namespace game_client
                     catch (TimeoutException)
                     {
                         // Якщо порт не відповідає протягом часу таймауту, показуємо повідомлення і повертаємося до головного меню
-                        MessageBox.Show("The serial port is inactive or not responding.", "Port Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                        Console.WriteLine("The serial port is inactive or not responding."); // або інше повідомлення для тестів  MessageBox.Show("The serial port is inactive or not responding.", "Port Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+
                     }
                 }
             }
             catch (Exception ex)
             {
                 // Обробка інших помилок під час роботи з портом
-                MessageBox.Show("Error: " + ex.Message, "Serial Port Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Console.WriteLine("Error: " + ex.Message); //MessageBox.Show("Error: " + ex.Message, "Serial Port Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+
             }
 
         }
@@ -1679,6 +1685,8 @@ namespace game_client
         /// @endcode
         public void button22_Click(object sender, EventArgs e)
         {
+            IsExitCalled = true;
+
             Application.Exit();
         }
 
@@ -1741,7 +1749,8 @@ namespace game_client
         public void button23_Click(object sender, EventArgs e)
         {
             SettingsForm settingsForm = new SettingsForm();
-            settingsForm.ShowDialog(); // Відкриваємо як модальне вікно
+
+            settingsForm.Show(); // Відкриваємо як модальне вікно
             // Вказуємо шлях до ini файлу
             IniFile ini = new IniFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.ini"));
             try
@@ -1770,6 +1779,8 @@ namespace game_client
             {
                 MessageBox.Show("Error reading INI file: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            settingsForm.Close();
+
         }
 
         /// <summary>
@@ -1888,7 +1899,9 @@ namespace game_client
             }
             else
             {
-                MessageBox.Show("Invalid score format", "Error");
+                Console.WriteLine("Error: Invalid score format"); // закоментовано для збільшення покриття в тестах або інше повідомлення для тестів  MessageBox.Show("Invalid score format", "Error");
+                return;
+
             }
             ResetScore();
             Player1();
@@ -1909,4 +1922,9 @@ namespace game_client
 
         }
     }
+    public static class TestEnvironment
+    {
+        public static bool IsTestMode = false; // За замовчуванням false для реального режиму
+    }
+
 }

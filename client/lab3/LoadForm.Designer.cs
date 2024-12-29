@@ -6,7 +6,8 @@ namespace game_client
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        public System.ComponentModel.IContainer components = null;
+
 
         /// <summary>
         /// Clean up any resources being used.
@@ -27,7 +28,8 @@ namespace game_client
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
-        private void InitializeComponent()
+        public void InitializeComponent()
+
         {
             this.panel1 = new System.Windows.Forms.Panel();
             this.button1 = new System.Windows.Forms.Button();
@@ -49,6 +51,8 @@ namespace game_client
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(483, 539);
             this.panel1.TabIndex = 0;
+            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
+
             // 
             // button1
             // 
@@ -126,12 +130,13 @@ namespace game_client
 
         #endregion
 
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.ListView listView1;
-        private System.Windows.Forms.ColumnHeader columnHeader1;
-        private System.Windows.Forms.ColumnHeader columnHeader2;
-        private System.Windows.Forms.ColumnHeader columnHeader3;
-        private System.Windows.Forms.Label label1;
+        public System.Windows.Forms.Panel panel1;
+        public System.Windows.Forms.Button button1;
+        public System.Windows.Forms.ListView listView1;
+        public System.Windows.Forms.ColumnHeader columnHeader1;
+        public System.Windows.Forms.ColumnHeader columnHeader2;
+        public System.Windows.Forms.ColumnHeader columnHeader3;
+        public System.Windows.Forms.Label label1;
+
     }
 }

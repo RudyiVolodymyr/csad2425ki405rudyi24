@@ -61,6 +61,10 @@ namespace game_client
             panel5.Paint += new PaintEventHandler(DrawCustomBorder);
         }
 
+        public SoundPlayer GetPlayer()
+        {
+            return _player;
+        }
         /// <summary>
         /// Saves the states of the checkboxes and the value in <c>textBox1</c> to the <c>config.ini</c> file.
         /// </summary>
@@ -133,7 +137,8 @@ namespace game_client
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error loading checkbox states: {ex.Message}");
+                Console.WriteLine($"File not found: {ex.Message}");  //MessageBox.Show($"Error loading checkbox states: {ex.Message}");
+
             }
 
         }

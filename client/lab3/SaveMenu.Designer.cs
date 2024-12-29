@@ -6,7 +6,7 @@ namespace game_client
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        public System.ComponentModel.IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -27,7 +27,8 @@ namespace game_client
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
-        private void InitializeComponent()
+        public void InitializeComponent()
+
         {
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
@@ -185,6 +186,8 @@ namespace game_client
             this.label1.Size = new System.Drawing.Size(198, 48);
             this.label1.TabIndex = 13;
             this.label1.Text = "Save menu";
+            this.label1.Click += new System.EventHandler(this.label1_Click);
+
             // 
             // SaveMenu
             // 
@@ -210,17 +213,18 @@ namespace game_client
 
         #endregion
 
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Panel panel3;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Panel panel4;
-        private System.Windows.Forms.TextBox textBox3;
-        private System.Windows.Forms.Label label4;
+        public System.Windows.Forms.Panel panel1;
+        public System.Windows.Forms.Button button1;
+        public System.Windows.Forms.Label label1;
+        public System.Windows.Forms.Panel panel2;
+        public System.Windows.Forms.Label label3;
+        public System.Windows.Forms.TextBox textBox1;
+        public System.Windows.Forms.Panel panel3;
+        public System.Windows.Forms.TextBox textBox2;
+        public System.Windows.Forms.Label label2;
+        public System.Windows.Forms.Panel panel4;
+        public System.Windows.Forms.TextBox textBox3;
+        public System.Windows.Forms.Label label4;
+
     }
 }
