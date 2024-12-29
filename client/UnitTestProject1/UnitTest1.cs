@@ -93,10 +93,6 @@ namespace testingMenu
                 random = new Random(value); // Встановлюємо значення для тесту
             }
 
-
-
-
-
         }
 
         [TestMethod]
@@ -1343,3 +1339,4 @@ Game_2_TextBox3=2:3
         }
     }
 }
+

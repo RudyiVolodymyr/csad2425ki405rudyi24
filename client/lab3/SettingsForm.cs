@@ -138,6 +138,7 @@ namespace game_client
             catch (Exception ex)
             {
                 Console.WriteLine($"File not found: {ex.Message}");  //MessageBox.Show($"Error loading checkbox states: {ex.Message}");
+
             }
 
         }

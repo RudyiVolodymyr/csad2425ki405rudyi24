@@ -280,6 +280,7 @@ namespace game_client
             catch (Exception ex)
             {
                 Console.WriteLine($"Error reading INI file: " + ex.Message); //  MessageBox.Show("Error reading INI file: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);або інше повідомлення для тестів
+
             }
             label2.Visible = false;
             panel1.Visible = false;
@@ -291,6 +292,7 @@ namespace game_client
             panel8.Visible = false;
             panel13.Visible = false;
             StartMenuCalled = true;
+
         }
 
         /// <summary>
@@ -587,6 +589,7 @@ namespace game_client
             };
 
             Action strategicChoiceAction = () =>
+
             {
                 clickTimer = new Timer();
                 clickTimer.Interval = 1000;
@@ -617,6 +620,7 @@ namespace game_client
             if (actionKey != null && actionDict.ContainsKey(actionKey))
             {
                 actionDict[actionKey].Invoke();
+
             }
         }
 
@@ -960,6 +964,7 @@ namespace game_client
         public void serverControl()
         {
             ServerControlCalled = true;
+
             IniFile ini = new IniFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.ini"));
             string portName = ini.Read("TextBoxValues", "TextBox1", "");
             try
@@ -983,6 +988,7 @@ namespace game_client
                     catch (TimeoutException)
                     {
                         Console.WriteLine("The serial port is inactive or not responding."); // або інше повідомлення для тестів  MessageBox.Show("The serial port is inactive or not responding.", "Port Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
                         StartMenu(); // Перенаправлення на головне меню
                         button1.Visible = true;
                         button21.Visible = true;
@@ -996,6 +1002,7 @@ namespace game_client
             catch (Exception ex)
             {
                 Console.WriteLine("Error: " + ex.Message, "Serial Port Error"); // або інше повідомлення для тестів MessageBox.Show("Error: " + ex.Message, "Serial Port Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
                 StartMenu(); // Перенаправлення на головне меню
                 button1.Visible = true;
                 button21.Visible = true;
@@ -1367,6 +1374,7 @@ namespace game_client
                 serialPort.Close();
             }
             base.OnFormClosing(e);*/
+
         }
 
         /// <summary>
@@ -1564,8 +1572,10 @@ namespace game_client
                     catch (TimeoutException)
                     {
                         // Якщо порт не відповідає протягом часу таймауту, показуємо повідомлення і повертаємося до головного меню
+
                         Console.WriteLine("The serial port is inactive or not responding."); // або інше повідомлення для тестів  MessageBox.Show("The serial port is inactive or not responding.", "Port Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
+
                     }
                 }
             }
@@ -1676,6 +1686,7 @@ namespace game_client
         public void button22_Click(object sender, EventArgs e)
         {
             IsExitCalled = true;
+
             Application.Exit();
         }
 
@@ -1738,6 +1749,7 @@ namespace game_client
         public void button23_Click(object sender, EventArgs e)
         {
             SettingsForm settingsForm = new SettingsForm();
+
             settingsForm.Show(); // Відкриваємо як модальне вікно
             // Вказуємо шлях до ini файлу
             IniFile ini = new IniFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.ini"));
@@ -1768,6 +1780,7 @@ namespace game_client
                 MessageBox.Show("Error reading INI file: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             settingsForm.Close();
+
         }
 
         /// <summary>
@@ -1888,6 +1901,7 @@ namespace game_client
             {
                 Console.WriteLine("Error: Invalid score format"); // закоментовано для збільшення покриття в тестах або інше повідомлення для тестів  MessageBox.Show("Invalid score format", "Error");
                 return;
+
             }
             ResetScore();
             Player1();

@@ -21,6 +21,7 @@ namespace game_client
         public string gameMode;
         public string gameScore;
 
+
         /// <summary>
         /// Initializes a new instance of the <c>LoadForm</c> class.
         /// </summary>
@@ -148,6 +149,7 @@ namespace game_client
             // MessageBox.Show($"Error reading file: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             //}
 
+
         }
         private void label1_Click(object sender, EventArgs e)
         {
@@ -215,6 +217,7 @@ namespace game_client
         public void listView1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             /*
+
             if (listView1.SelectedItems.Count > 0)
             {
                 ListViewItem selectedItem = listView1.SelectedItems[0];
@@ -363,6 +366,7 @@ namespace game_client
 
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
+
 
         }
     }

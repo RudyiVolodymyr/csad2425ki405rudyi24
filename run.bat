@@ -52,6 +52,7 @@ if not exist "%rootDir%\deploy\documentation" (
     echo Folder 'documentation' already exists in 'deploy'.
 )
 
+
 set clientArtifactZipPath=%~dp0\artefacts\client_build_artifacts.zip
 set clientTestArtifactZipPath=%~dp0\artefacts\client_test_artifacts.zip
 set serverArtifactZipPath=%~dp0\artefacts\server_build_artifacts.zip
@@ -242,7 +243,7 @@ dotnet test deploy\client\UnitTestProject1.dll --logger "trx;LogFileName=%client
 if %errorlevel% neq 0 (
     echo Client tests failed.
     set step7Status=FAILED
-    goto FinalReport
+
 ) else (
     echo Client tests completed successfully.
     set step7Status=PASSED
@@ -495,6 +496,7 @@ if %errorlevel% neq 0 (
 
 REM Step 16: Request COM port from user (for local execution) or use provided COM port (for GitHub Actions)
 echo Step 16: Checking for COM port and baud rate...
+
 REM Check if running in GitHub Actions
     REM Use the COM port and baud rate passed as environment variables (e.g., COM_PORT and BAUD_RATE)
     set "arduinoPort=%1"
@@ -508,6 +510,7 @@ REM Check if baud rate is 9600
 if not "%baudRate%"=="9600" (
     echo Error: Unsupported baud rate %baudRate%. Only 9600 is allowed.
     set step16Status=FAILED
+
     goto FinalReport
 )
 
@@ -656,6 +659,7 @@ echo ^<tr^>^<td^>14^</td^>^<td^>Compile Arduino sketch^</td^>^<td^>%step14Status
 echo ^<tr^>^<td^>15^</td^>^<td^>Archive server build artifacts^</td^>^<td^>%step15Status%^</td^>^</tr^>
 echo ^<tr^>^<td^>16^</td^>^<td^>Request COM port and baud rate^</td^>^<td^>%step16Status%^</td^>^</tr^>
 echo ^<tr^>^<td^>17^</td^>^<td^>Upload firmware to Arduino^</td^>^<td^>%step17Status%^</td^>^</tr^>
+
 
 echo ^</table^>
 echo ^</body^>

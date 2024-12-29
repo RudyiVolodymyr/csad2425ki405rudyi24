@@ -8,6 +8,7 @@ namespace game_client
         /// </summary>
         public System.ComponentModel.IContainer components = null;
 
+
         /// <summary>
         /// Clean up any resources being used.
         /// </summary>
@@ -28,6 +29,7 @@ namespace game_client
         /// the contents of this method with the code editor.
         /// </summary>
         public void InitializeComponent()
+
         {
             this.panel1 = new System.Windows.Forms.Panel();
             this.button1 = new System.Windows.Forms.Button();
@@ -50,6 +52,7 @@ namespace game_client
             this.panel1.Size = new System.Drawing.Size(483, 539);
             this.panel1.TabIndex = 0;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
+
             // 
             // button1
             // 
@@ -134,5 +137,6 @@ namespace game_client
         public System.Windows.Forms.ColumnHeader columnHeader2;
         public System.Windows.Forms.ColumnHeader columnHeader3;
         public System.Windows.Forms.Label label1;
+
     }
 }
