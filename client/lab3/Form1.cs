@@ -255,6 +255,7 @@ namespace game_client
             IniFile ini = new IniFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.ini"));
             try
             {
+
                 // Читаємо значення з ini файлу як рядки
                 string checkBox1Value = ini.Read("CheckboxStates", "CheckBox1","");
                 string checkBox2Value = ini.Read("CheckboxStates", "CheckBox2","");
@@ -1583,7 +1584,6 @@ namespace game_client
                 // Обробка інших помилок під час роботи з портом
                 Console.WriteLine("Error: " + ex.Message); //MessageBox.Show("Error: " + ex.Message, "Serial Port Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
-
             }
 
         }
@@ -1926,5 +1926,4 @@ namespace game_client
     {
         public static bool IsTestMode = false; // За замовчуванням false для реального режиму
     }
-
 }

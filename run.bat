@@ -39,6 +39,19 @@ if not exist "%rootDir%\artefacts" (
 ) else (
     echo Folder 'deploy' already exists.
 )
+if not exist "%rootDir%\deploy\test_coverage" (
+    mkdir "%rootDir%\deploy\test_coverage"
+    echo Folder 'test_coverage' created in 'deploy'.
+) else (
+    echo Folder 'test_coverage' already exists in 'deploy'.
+)
+if not exist "%rootDir%\deploy\documentation" (
+    mkdir "%rootDir%\deploy\documentation"
+    echo Folder 'documentation' created in 'deploy'.
+) else (
+    echo Folder 'documentation' already exists in 'deploy'.
+)
+
 
 set clientArtifactZipPath=%~dp0\artefacts\client_build_artifacts.zip
 set clientTestArtifactZipPath=%~dp0\artefacts\client_test_artifacts.zip
@@ -104,7 +117,6 @@ set step14Status=NOT STARTED
 set step15Status=NOT STARTED
 set step16Status=NOT STARTED
 set step17Status=NOT STARTED
-
 set step1Status=PASSED
 echo Step 1 completed successfully. [PASSED]
 
@@ -231,6 +243,7 @@ dotnet test deploy\client\UnitTestProject1.dll --logger "trx;LogFileName=%client
 if %errorlevel% neq 0 (
     echo Client tests failed.
     set step7Status=FAILED
+
 ) else (
     echo Client tests completed successfully.
     set step7Status=PASSED
@@ -244,6 +257,7 @@ if %errorlevel% equ 0 (
     echo Some client tests failed.
     set clientTestsStatus=Failed
     set step8Status=FAILED
+    goto FinalReport
 ) else (
     echo All client tests passed successfully.
     set clientTestsStatus=Passed
@@ -465,7 +479,6 @@ if %errorlevel% neq 0 (
 
 REM Step 15: Archive server build artifacts
 echo Step 15: Creating server build artifact archive...
-
 
 REM Create archive using PowerShell
 powershell -Command "Compress-Archive -Path %serverOutputFolder% -DestinationPath %serverArtifactZipPath%"

@@ -21,7 +21,6 @@ namespace game_client
         public string GameMode => gameMode;
         public string GameScore => gameScore;
 
-
         /// <summary>
         /// Initializes a new instance of the <c>SaveMenu</c> class.
         /// </summary>
@@ -105,7 +104,6 @@ namespace game_client
         }
 
         public void label4_Click(object sender, EventArgs e)
-
         {
 
         }
@@ -162,13 +160,11 @@ namespace game_client
                 ini.Write("GameData", $"{gameKey}_TextBox3", textBox3.Text);
 
                 Console.WriteLine($"Дані успішно збережені у config.ini!"); // або інше повідомлення для тестів MessageBox.Show("Дані успішно збережені у config.ini!");
-
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error saving data: {ex.Message}\nError type: {ex.GetType().Name}\n{ex.StackTrace}");
                 throw;
-
             }
         }
 

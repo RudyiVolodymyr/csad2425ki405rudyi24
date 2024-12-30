@@ -48,7 +48,7 @@ jobs:
       - name: Run CMD script
         shell: cmd
         run: |
-          .\run.bat COM9 9600
+          .\run.bat COM10 9600
 
       - name: Upload script results as artifact
         uses: actions/upload-artifact@v3
